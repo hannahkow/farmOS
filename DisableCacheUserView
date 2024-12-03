@@ -1,0 +1,24 @@
+<?php
+
+use Drupal\views\Entity\View;
+use Drupal\Core\Cache\Cache;
+
+//clear the View cache when a user logs in.
+
+
+function farmos_entity_update(Drupal\Core\Entity\EntityInterface $entity) {
+ if ($entity->getEntityTypeId() === 'view' && $entity->id() === 'people') {
+   // clear the View cache for the 'people' page when it's updated.
+   \Drupal::service('cache_tags.invalidator')->invalidateTags(['view_people']);
+ }
+}
+
+function disable_people_view_cache() {
+ $view = View::load('people');
+  // Check if the View exists.
+ if ($view) {
+   // Disable caching on the View.
+   $view->setDisplay('default')->setOption('cache', 'none');
+   $view->save();
+ }
+}
