@@ -1,0 +1,23 @@
+<?php
+
+namespace Drupal\your_module\EventSubscriber;
+
+use Drupal\Core\EventSubscriber\EventSubscriberInterface;
+use Drupal\user\Event\UserEvents;
+use Drupal\user\Event\UserLoginEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+
+class UserLoginSubscriber implements EventSubscriberInterface {
+  public static function getSubscribedEvents() {
+    $events[UserEvents::USER_LOGIN][] = ['onUserLogin'];
+    return $events;
+  }
+
+  // clears the cache when a user logs in.
+
+  public function onUserLogin(UserLoginEvent $event) {
+    // Invalidate cache for the /people page.
+    \Drupal::service('cache_tags.invalidator')->invalidateTags(['view_people']);
+  }
+}
