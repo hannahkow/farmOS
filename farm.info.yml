@@ -28,3 +28,4 @@ install:
   - dblog
 themes:
   - claro
+  #gin theme does not work
